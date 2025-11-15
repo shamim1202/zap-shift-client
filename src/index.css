@@ -6,26 +6,13 @@
   default: true;
   --color-primary: #caeb66;
   --color-secondary: #03373d;
-  /* text-#1f1f1f */
+  --color-accent: #606060;
+  --color-neutral: #dadada
+  /* text-#1f1f1f , whole bg- #eaeced*/
+
 }
 
 body {
   font-family: "Urbanist", sans-serif;
 }
 
-/* -------------> Carousel CSS <------------- */
-.carousel .thumbs-wrapper {
-  @apply flex justify-center;
-}
-.carousel .thumbs {
-  @apply flex justify-center md:mx-2;
-}
-.carousel .thumb {
-  @apply border border-gray-300;
-  width: auto !important;
-  height: auto !important;
-  padding: 0 !important;
-}
-.carousel .thumb img {
-  @apply w-14 md:w-20;
-}

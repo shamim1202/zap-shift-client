@@ -1,12 +1,12 @@
-import "react-responsive-carousel/lib/styles/carousel.min.css";
-import { Carousel } from "react-responsive-carousel";
-import { MdArrowOutward } from "react-icons/md";
 import { LuBike } from "react-icons/lu";
+import { MdArrowOutward } from "react-icons/md";
+import { Carousel } from "react-responsive-carousel";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
 
 const Banner = () => {
   return (
     // autoPlay="true" infiniteLoop="true"
-    <Carousel stopOnHover="true" >
+    <Carousel autoPlay={true} infiniteLoop={true} stopOnHover={true} showThumbs={false}>
       <div className="relative">
         <img src="https://i.ibb.co.com/nstchXS5/banner1.png" />
         <div>
