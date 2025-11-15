@@ -1,9 +1,31 @@
+@import url("https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap");
 @import "tailwindcss";
 @plugin "daisyui";
-
-/* Google Font */
-@import url("https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap");
+@plugin "daisyui/theme" {
+  name: "light";
+  default: true;
+  --color-primary: #caeb66;
+  --color-secondary: #03373d;
+  /* text-#1f1f1f */
+}
 
 body {
   font-family: "Urbanist", sans-serif;
+}
+
+/* -------------> Carousel CSS <------------- */
+.carousel .thumbs-wrapper {
+  @apply flex justify-center;
+}
+.carousel .thumbs {
+  @apply flex justify-center md:mx-2;
+}
+.carousel .thumb {
+  @apply border border-gray-300;
+  width: auto !important;
+  height: auto !important;
+  padding: 0 !important;
+}
+.carousel .thumb img {
+  @apply w-14 md:w-20;
 }
