@@ -25,7 +25,7 @@ const HowItWorks = () => {
 
   return (
     <div className="px-8 md:px-20">
-      <h1 className="text-secondary text-2xl md:text-5xl font-bold mb-4 md:mb-8">How It Works</h1>
+      <h1 className="text-secondary text-2xl md:text-4xl font-bold mb-4 md:mb-8">How It Works</h1>
 
       <div className="grid gap-4 md:gap-8 grid-cols-2 md:grid-cols-4">
         {steps.map((step, i) => (
@@ -35,7 +35,7 @@ const HowItWorks = () => {
           >
             <div className="text-5xl mb-4">{step.icon}</div>
             <h3 className="text-secondary md:text-xl font-semibold mb-2">{step.title}</h3>
-            <p className="text-accent text-sm md:text-base leading-relaxed">{step.desc}</p>
+            <p className="text-accent text-sm md:text-base">{step.desc}</p>
           </div>
         ))}
       </div>

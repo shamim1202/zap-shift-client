@@ -3,8 +3,8 @@ import logo from "../../assets/logo.png";
 const Logo = () => {
   return (
     <div className="flex items-end">
-      <img src={logo} alt="Logo" />
-      <span className="md:text-3xl md:font-bold md:-mb-1.5 md:-ms-3.5">
+      <img className="w-7" src={logo} alt="Logo" />
+      <span className="text-xl md:text-3xl font-bold md:font-extrabold -mb-1 -ms-3 md:-mb-2 md:-ms-3">
         ZapShift
       </span>
     </div>
