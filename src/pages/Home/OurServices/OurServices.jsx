@@ -5,7 +5,7 @@ const OurServices = () => {
     {
       icon: "🚚",
       title: "Express & Standard Delivery",
-      desc: "We deliver parcels within 24–72 hours in Dhaka, Barishal, Chittagong, Sylhet, Khulna, and Rajshahi.  Express delivery available in Dhaka within 4–6 hours from pick-up to drop-off.",
+      desc: "We deliver parcels within 24–72 hours in Dhaka, Barishal, Chittagong, Sylhet, Khulna, and Rajshahi. Express delivery available in Dhaka within 4–6 hours from pick-up to drop-off.",
     },
     {
       icon: "📦",
@@ -36,8 +36,8 @@ const OurServices = () => {
 
   return (
     <div className="bg-secondary p-8 md:p-20 rounded-2xl md:rounded-4xl text-center">
-      <div className="md:w-2xl mx-auto mb-4 md:mb-8 md:space-y-3">
-        <h2 className="text-2xl md:text-4xl font-bold text-white">Our Services</h2>
+      <div className="md:w-3xl mx-auto mb-4 md:mb-8 md:space-y-3">
+        <h2 className="text-2xl md:text-5xl font-bold text-white">Our Services</h2>
         <p className="text-neutral text-sm md:text-base">Enjoy fast, reliable parcel delivery with real-time tracking and zero hassle. From personal packages to business shipments — we deliver on time, every time.</p>
       </div>
 

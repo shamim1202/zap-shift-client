@@ -25,7 +25,7 @@ const HowItWorks = () => {
 
   return (
     <div className="px-8 md:px-20">
-      <h1 className="text-secondary text-2xl md:text-4xl font-bold mb-4 md:mb-8">How It Works</h1>
+      <h1 className="text-secondary text-2xl md:text-5xl font-bold mb-4 md:mb-8">How It Works</h1>
 
       <div className="grid gap-4 md:gap-8 grid-cols-2 md:grid-cols-4">
         {steps.map((step, i) => (
