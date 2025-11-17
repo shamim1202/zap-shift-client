@@ -1,16 +1,41 @@
 import { Link, NavLink } from "react-router";
 import Logo from "../../../components/Logo/Logo";
+import useAuth from "../../../hooks/useAuth";
 
 const Navbar = () => {
+  const { user, logOut } = useAuth();
 
-  const links = <>
-    <li><NavLink>Services</NavLink></li>
-    <li><NavLink to="/coverage">Coverage</NavLink></li>
-    <li><NavLink>Pricing</NavLink></li>
-    <li><NavLink>About Us</NavLink></li>
-    <li><NavLink>Blog</NavLink></li>
-    <li><NavLink>Contact</NavLink></li>
-  </>
+  const links = (
+    <>
+      <li className="text-sm md:text-base font-semibold">
+        <NavLink>Services</NavLink>
+      </li>
+      <li className="text-sm md:text-base font-semibold">
+        <NavLink to="/coverage">Coverage</NavLink>
+      </li>
+      <li className="text-sm md:text-base font-semibold">
+        <NavLink>Pricing</NavLink>
+      </li>
+      <li className="text-sm md:text-base font-semibold">
+        <NavLink>About Us</NavLink>
+      </li>
+      <li className="text-sm md:text-base font-semibold">
+        <NavLink>Blog</NavLink>
+      </li>
+      <li className="text-sm md:text-base font-semibold">
+        <NavLink>Contact</NavLink>
+      </li>
+    </>
+  );
+
+  const handleLogout = () => {
+    logOut()
+      .then()
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <div className="navbar bg-base-100 mb-4 md:mb-8">
       <div className="navbar-start">
@@ -45,13 +70,32 @@ const Navbar = () => {
       </div>
 
       <div className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal px-1">
-          {links}
-        </ul>
+        <ul className="menu menu-horizontal px-1">{links}</ul>
       </div>
 
-      <div className="navbar-end">
-        <a className="btn">Button</a>
+      <div className="navbar-end md:space-x-4">
+        {user ? (
+          <button
+            onClick={handleLogout}
+            className="btn btn-outline btn-secondary btn-sm md:btn-md"
+          >
+            Logout
+          </button>
+        ) : (
+          <Link
+            to="/login"
+            className="btn btn-primary text-gray-900 btn-sm md:btn-md"
+          >
+            Log in
+          </Link>
+        )}
+
+        <Link
+          to="/be_a_rider"
+          className="btn btn-primary text-gray-900 btn-sm md:btn-md"
+        >
+          Be a rider
+        </Link>
       </div>
     </div>
   );

@@ -1,10 +1,9 @@
-import React from "react";
 import Banner from "../Banner/Banner";
+import BecomeMerchant from "../BecomeMerchant/BecomeMerchant";
+import Brands from "../Brands/Brands";
 import HowItWorks from "../HowItWorks/HowItWorks";
 import OurServices from "../OurServices/OurServices";
-import Brands from "../Brands/Brands";
 import Reviews from "../Reviews/Reviews";
-import BecomeMerchant from "../BecomeMerchant/BecomeMerchant";
 
 const reviewsPromise = fetch("/public/reviews.json").then((res) => res.json());
 
@@ -15,8 +14,8 @@ const Home = () => {
       <HowItWorks></HowItWorks>
       <OurServices></OurServices>
       <Brands></Brands>
-      <Reviews reviewsPromise={reviewsPromise}></Reviews>
       <BecomeMerchant></BecomeMerchant>
+      <Reviews reviewsPromise={reviewsPromise}></Reviews>
     </div>
   );
 };
