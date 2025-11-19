@@ -2,8 +2,8 @@ import riderImg from "../../assets/agent-pending.png";
 
 const BeARider = () => {
   return (
-    <div className="bg-white md:px-25 md:py-20">
-      <div className="md:w-[45%] md:mb-10">
+    <div className="bg-white md:px-20 md:py-16">
+      <div className="md:w-[50%] md:mb-10">
         <h1 className="text-2xl md:text-5xl font-bold md:font-extrabold text-secondary md:mb-4">
           Be a Rider
         </h1>
@@ -18,7 +18,7 @@ const BeARider = () => {
       <div className="flex flex-col-reverse md:flex-row items-end justify-between md:gap-16">
         {/* ---------- Rider Join Form ----------- */}
         <div className="flex-1">
-          <fieldset className="fieldset bg-base-200 p-4 rounded-xl">
+          <fieldset className="fieldset p-4 rounded-xl">
             {/* ------------ Name & Age ------------ */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="form-control">
