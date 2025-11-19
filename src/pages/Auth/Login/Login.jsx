@@ -1,17 +1,20 @@
 import { useForm } from "react-hook-form";
-import { Link } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import Logo from "../../../components/Logo/Logo";
 import useAuth from "../../../hooks/useAuth";
 
 const Login = () => {
   const { register, handleSubmit } = useForm();
   const { signInUser, googleLogin } = useAuth();
-  
+  const location = useLocation()
+  const navigate = useNavigate()
+  console.log(location, navigate)
 
   const handleLogin = (data) => {
     signInUser(data.email, data.password)
       .then((res) => {
         console.log(res.user);
+        navigate(location?.state ? location.state : "/")
       })
       .then((err) => {
         console.log(err);
@@ -22,6 +25,7 @@ const Login = () => {
     googleLogin()
       .then((res) => {
         console.log(res.user);
+        navigate(location?.state ? location.state : "/")
       })
       .then((err) => {
         console.log(err);
@@ -30,8 +34,10 @@ const Login = () => {
 
   return (
     <div>
-      <div className="md:py-8">
-        <Logo></Logo>
+      <div className="py-2 md:py-5">
+        <Link to="/">
+          <Logo></Logo>
+        </Link>
       </div>
       <div className="w-2/3 mx-auto">
         <div>
@@ -74,6 +80,7 @@ const Login = () => {
             Don't have an account?{" "}
             <Link
               to="/register"
+              state={location?.state}
               className="text-primary hover:text-red-500 hover:underline"
             >
               Register

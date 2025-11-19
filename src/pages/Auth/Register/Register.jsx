@@ -1,31 +1,62 @@
+import axios from "axios";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router";
-import useAuth from "../../../hooks/useAuth";
+import { Link, useLocation, useNavigate } from "react-router";
 import Logo from "../../../components/Logo/Logo";
+import useAuth from "../../../hooks/useAuth";
 
 const Register = () => {
-  const { registerUser } = useAuth();
+  const { registerUser, updateUserProfile } = useAuth();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
+  const location = useLocation()
+  const navigate = useNavigate()
+  console.log(location)
+
   const handleRegister = (data) => {
-    console.log(data);
+    const profileImg = data.photo[0];
+
     registerUser(data.email, data.password)
       .then((res) => {
         console.log(res.user);
+        const formData = new FormData();
+        formData.append("image", profileImg);
+        const imgApiUrl = `https://api.imgbb.com/1/upload?key=${
+          import.meta.env.VITE_image_hoisting
+        }`;
+
+        axios.post(imgApiUrl, formData).then((res) => {
+
+          const userProfile = {
+            displayName: data.name,
+            photoURL: res.data.data.url,
+          };
+          updateUserProfile(userProfile)
+            .then(() => {
+              console.log("User Profile Update Successful");
+              navigate=(location?.state ? location.state || "/")
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        });
       })
-      .then((err) => {
+      .catch((err) => {
         console.log(err);
       });
   };
+
   return (
     <div>
-      <div className="md:py-8">
-        <Logo></Logo>
+      <div className="py-2 md:py-5">
+        <Link to="/">
+          <Logo></Logo>
+        </Link>
       </div>
+
       <div className="w-2/3 mx-auto">
         <div>
           <h1 className="text-2xl md:text-5xl font-bold md:font-extrabold">
@@ -35,6 +66,7 @@ const Register = () => {
             Register with ZapShift
           </p>
         </div>
+
         <form onSubmit={handleSubmit(handleRegister)}>
           <fieldset className="fieldset">
             {/* -------------- Name ------------- */}
@@ -59,6 +91,22 @@ const Register = () => {
             {errors.name?.type === "minLength" && (
               <p className="text-red-500 text-xs md:text-sm">
                 Minimum 4 characters
+              </p>
+            )}
+
+            {/* -------------- Photo ------------ */}
+            <label className="label text-gray-900 text-xs md:text-sm md:font-medium">
+              Photo
+            </label>
+            <input
+              type="file"
+              {...register("photo", { required: true })}
+              className="file-input w-full md:mb-2 text-sm md:text-base"
+              placeholder="Your photo"
+            />
+            {errors.photo?.type === "required" && (
+              <p className="text-red-500 text-xs md:text-sm">
+                A profile photo is required!
               </p>
             )}
 
@@ -120,6 +168,7 @@ const Register = () => {
             Already have an account?{" "}
             <Link
               to="/login"
+              state={location?.state}
               className="text-primary hover:text-red-500 hover:underline"
             >
               Login

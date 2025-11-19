@@ -5,7 +5,8 @@ import Login from "../pages/Auth/Login/Login";
 import Register from "../pages/Auth/Register/Register";
 import Coverage from "../pages/Coverage/Coverage";
 import Home from "../pages/Home/Home/Home";
-
+import PrivateRoute from "./PrivateRoute";
+import BeARider from "../pages/BeARider/BeARider";
 
 export const router = createBrowserRouter([
   {
@@ -15,6 +16,14 @@ export const router = createBrowserRouter([
       {
         index: true,
         Component: Home,
+      },
+      {
+        path: "/be_a_rider",
+        element: (
+          <PrivateRoute>
+            <BeARider></BeARider>
+          </PrivateRoute>
+        ),
       },
       {
         path: "/coverage",
@@ -29,11 +38,11 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "login",
-        Component: Login
+        Component: Login,
       },
       {
         path: "register",
-        Component: Register
+        Component: Register,
       },
     ],
   },

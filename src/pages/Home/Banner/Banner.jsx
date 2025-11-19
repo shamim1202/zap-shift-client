@@ -2,17 +2,30 @@ import { LuBike } from "react-icons/lu";
 import { MdArrowOutward } from "react-icons/md";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
+import { Link } from "react-router";
 
 const Banner = () => {
   return (
     // autoPlay="true" infiniteLoop="true"
-    <Carousel autoPlay={true} infiniteLoop={true} stopOnHover={true} showThumbs={false}>
+    <Carousel
+      autoPlay={true}
+      infiniteLoop={true}
+      stopOnHover={true}
+      showThumbs={false}
+    >
       <div className="relative">
         <img src="https://i.ibb.co.com/nstchXS5/banner1.png" />
         <div>
-            <button className="absolute z-10 left-7 bottom-7 md:left-23 md:bottom-17 btn btn-xs md:btn-lg md:py-6.5 bg-primary text-[#1f1f1f] md:rounded-4xl shadow-none">Track Your parcel <MdArrowOutward /></button>
+          <button className="absolute z-10 left-7 bottom-7 md:left-23 md:bottom-17 btn btn-xs md:btn-lg md:py-6.5 bg-primary text-[#1f1f1f] md:rounded-4xl shadow-none">
+            Track Your parcel <MdArrowOutward />
+          </button>
 
-            <button className="absolute left-7 bottom-0.5 md:left-78 md:bottom-18 btn btn-xs md:btn-lg btn-outline btn-secondary md:rounded-3xl">Be A Rider <LuBike /></button>
+          <Link
+            to="/be_a_rider"
+            className="absolute left-7 bottom-0.5 md:left-78 md:bottom-18 btn btn-xs md:btn-lg btn-outline btn-secondary md:rounded-3xl"
+          >
+            Be A Rider <LuBike />
+          </Link>
         </div>
       </div>
       <div>
