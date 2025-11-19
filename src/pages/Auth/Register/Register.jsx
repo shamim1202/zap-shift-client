@@ -37,7 +37,7 @@ const Register = () => {
           updateUserProfile(userProfile)
             .then(() => {
               console.log("User Profile Update Successful");
-              navigate=(location?.state ? location.state || "/")
+              navigate=(location?.state ? location.state : "/")
             })
             .catch((err) => {
               console.log(err);
