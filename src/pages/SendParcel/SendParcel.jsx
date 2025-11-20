@@ -1,11 +1,27 @@
 import { useForm } from "react-hook-form";
+import { useLoaderData } from "react-router";
 
 const SendParcel = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
+    watch,
   } = useForm();
+
+  // get all region from api/json --------------->
+  const allRegions = useLoaderData();
+  const duplicateRegions = allRegions.map((c) => c.region);
+  const regions = [...new Set(duplicateRegions)];
+  const senderRegion = watch("senderRegion");
+  console.log(regions);
+
+  // show all district region wise -------------->
+  const regionWiseDistricts = (region) => {
+    const regionalDistricts = allRegions.filter((r) => r.region === region);
+    const districts = regionalDistricts.map((d) => d.district);
+    return districts;
+  };
 
   const handleSendParcel = (data) => {
     console.log(data);
@@ -48,7 +64,7 @@ const SendParcel = () => {
           {/* ------- Parcel Info (Name & Weight) ------- */}
           <div className="grid grid-cols-1 md:grid-cols-2 md:gap-10">
             <fieldset className="fieldset">
-              <label className="label">Parcel Name</label>
+              <label className="label text-xs md:text-sm">Parcel Name</label>
               <input
                 type="text"
                 className="input w-full"
@@ -58,7 +74,7 @@ const SendParcel = () => {
             </fieldset>
 
             <fieldset>
-              <label className="label">Parcel Weight</label>
+              <label className="label text-xs md:text-sm">Parcel Weight</label>
               <input
                 type="number"
                 className="input w-full"
@@ -78,7 +94,9 @@ const SendParcel = () => {
               <div>
                 <fieldset className="fieldset">
                   {/* ----- sender name */}
-                  <label className="label">Sender Name</label>
+                  <label className="label text-xs md:text-sm">
+                    Sender Name
+                  </label>
                   <input
                     type="text"
                     className="input w-full"
@@ -86,7 +104,9 @@ const SendParcel = () => {
                     {...register("senderName")}
                   />
                   {/* ----- sender email */}
-                  <label className="label">Sender Email</label>
+                  <label className="label text-xs md:text-sm">
+                    Sender Email
+                  </label>
                   <input
                     type="email"
                     className="input w-full"
@@ -94,24 +114,57 @@ const SendParcel = () => {
                     {...register("senderEmail")}
                   />
                   {/* ---- Sender Address ----- */}
-                  <label className="label">Sender Address</label>
+                  <label className="label text-xs md:text-sm">
+                    Sender Address
+                  </label>
                   <input
                     type="text"
                     className="input w-full"
                     placeholder="Sender Address"
                     {...register("senderAddress")}
                   />
+
+                  {/* ------- Sender Region -------- */}
+                  <label className="label text-xs md:text-sm">
+                    Sender Region
+                  </label>
+                  <select
+                    className="select select-bordered w-full"
+                    {...register("senderRegion")}
+                  >
+                    <option disabled selected>
+                      Select your region
+                    </option>
+                    {regions.map((r, i) => (
+                      <option key={i} value={r}>
+                        {r}
+                      </option>
+                    ))}
+                  </select>
+
                   {/* -------- Sender District -------- */}
-                  <label className="label">Sender District</label>
-                  <input
-                    type="text"
-                    className="input w-full"
-                    placeholder="Sender District"
+
+                  <label className="label text-xs md:text-sm">
+                    Sender District
+                  </label>
+                  <select
+                    className="select select-bordered w-full"
                     {...register("senderDistrict")}
-                  />
+                  >
+                    <option disabled selected>
+                      Select your District
+                    </option>
+                    {regionWiseDistricts(senderRegion).map((r, i) => (
+                      <option key={i} value={r}>
+                        {r}
+                      </option>
+                    ))}
+                  </select>
 
                   {/* -------- Sender Phone No -------- */}
-                  <label className="label">Sender Phone No</label>
+                  <label className="label text-xs md:text-sm">
+                    Sender Phone No
+                  </label>
                   <input
                     type="number"
                     className="input w-full"
@@ -130,7 +183,9 @@ const SendParcel = () => {
               <div>
                 <fieldset className="fieldset">
                   {/* ----- Receiver name */}
-                  <label className="label">Receiver Name</label>
+                  <label className="label text-xs md:text-sm">
+                    Receiver Name
+                  </label>
                   <input
                     type="text"
                     className="input w-full"
@@ -138,7 +193,9 @@ const SendParcel = () => {
                     {...register("receiverName")}
                   />
                   {/* ----- Receiver email */}
-                  <label className="label">Receiver Email</label>
+                  <label className="label text-xs md:text-sm">
+                    Receiver Email
+                  </label>
                   <input
                     type="email"
                     className="input w-full"
@@ -146,15 +203,35 @@ const SendParcel = () => {
                     {...register("receiverEmail")}
                   />
                   {/* ---- Receiver Address ----- */}
-                  <label className="label">Receiver Address</label>
+                  <label className="label text-xs md:text-sm">
+                    Receiver Address
+                  </label>
                   <input
                     type="text"
                     className="input w-full"
                     placeholder="Receiver Address"
                     {...register("receiverAddress")}
                   />
+                  {/* ------- Receiver Region -------- */}
+                  <fieldset>
+                    <label className="label text-xs md:text-sm block md:pb-1">
+                      Receiver Region
+                    </label>
+                    <select className="select select-bordered w-full">
+                      <option disabled selected>
+                        Select your region
+                      </option>
+                      {regions.map((r, i) => (
+                        <option key={i} value={r}>
+                          {r}
+                        </option>
+                      ))}
+                    </select>
+                  </fieldset>
                   {/* -------- Receiver District -------- */}
-                  <label className="label">Receiver District</label>
+                  <label className="label text-xs md:text-sm">
+                    Receiver District
+                  </label>
                   <input
                     type="text"
                     className="input w-full"
@@ -163,7 +240,9 @@ const SendParcel = () => {
                   />
 
                   {/* -------- Receiver Phone No -------- */}
-                  <label className="label">Receiver Phone No</label>
+                  <label className="label text-xs md:text-sm">
+                    Receiver Phone No
+                  </label>
                   <input
                     type="number"
                     className="input w-full"
