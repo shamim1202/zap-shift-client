@@ -1,20 +1,27 @@
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { useLoaderData } from "react-router";
+import Swal from "sweetalert2";
+import useAuth from "../../hooks/useAuth";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const SendParcel = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
-    watch,
+    // formState: { errors },
+    control,
   } = useForm();
+
+  const { user } = useAuth();
+  console.log(user);
+  const axiosSecure = useAxiosSecure();
 
   // get all region from api/json --------------->
   const allRegions = useLoaderData();
   const duplicateRegions = allRegions.map((c) => c.region);
   const regions = [...new Set(duplicateRegions)];
-  const senderRegion = watch("senderRegion");
-  console.log(regions);
+  const senderRegion = useWatch({ control, name: "senderRegion" });
+  const receiverRegion = useWatch({ control, name: "receiverRegion" });
 
   // show all district region wise -------------->
   const regionWiseDistricts = (region) => {
@@ -25,6 +32,50 @@ const SendParcel = () => {
 
   const handleSendParcel = (data) => {
     console.log(data);
+
+    const isDocument = data.parcelType === "document";
+    const isSameDistrict = data.senderDistrict === data.receiverDistrict;
+    const parcelWeight = parseFloat(data.parcelWeight);
+    let cost = 0;
+
+    if (isDocument) {
+      cost = isSameDistrict ? 60 : 80;
+    } else {
+      if (parcelWeight < 3) {
+        cost = isSameDistrict ? 110 : 150;
+      } else {
+        const minCharge = isSameDistrict ? 110 : 150;
+        const extraWeight = parcelWeight - 3;
+        const extraCharge = isSameDistrict
+          ? extraWeight * 40
+          : extraWeight * 40 + 40;
+        cost = minCharge + extraCharge;
+      }
+    }
+
+    console.log("cost calculation", cost);
+
+    Swal.fire({
+      title: "Are you agree with sending cost?",
+      text: `Your cost: ${cost}taka; You won't be able to cancel this!`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, Confirm",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Save the parcel into the database ----------------------->
+        axiosSecure.post("/parcels", data).then((res) => {
+          console.log("after confirmed", res.data);
+        });
+      }
+      Swal.fire({
+        title: "Confirmed!",
+        text: "Your parcel has been confirmed.",
+        icon: "success",
+      });
+    });
   };
 
   return (
@@ -62,7 +113,7 @@ const SendParcel = () => {
           </div>
 
           {/* ------- Parcel Info (Name & Weight) ------- */}
-          <div className="grid grid-cols-1 md:grid-cols-2 md:gap-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 md:gap-10 items-center">
             <fieldset className="fieldset">
               <label className="label text-xs md:text-sm">Parcel Name</label>
               <input
@@ -76,7 +127,7 @@ const SendParcel = () => {
             <fieldset>
               <label className="label text-xs md:text-sm">Parcel Weight</label>
               <input
-                type="number"
+                type="text"
                 className="input w-full"
                 placeholder="Parcel Weight (kg)"
                 {...register("parcelWeight")}
@@ -93,26 +144,90 @@ const SendParcel = () => {
               </h3>
               <div>
                 <fieldset className="fieldset">
-                  {/* ----- sender name */}
+                  {/* ----- Sender Name and E-mail ----- */}
+                  <div className="flex flex-col md:flex-row">
+                    <div>
+                      {/* ----- sender name */}
+                      <label className="label text-xs md:text-sm">
+                        Sender Name
+                      </label>
+                      <input
+                        type="text"
+                        className="input w-full"
+                        defaultValue={user?.displayName}
+                        readOnly
+                        {...register("senderName")}
+                      />
+                    </div>
+                    <div>
+                      {/* ----- sender email */}
+                      <label className="label text-xs md:text-sm">
+                        Sender Email
+                      </label>
+                      <input
+                        type="email"
+                        className="input w-full"
+                        defaultValue={user?.email}
+                        readOnly
+                        {...register("senderEmail")}
+                      />
+                    </div>
+                  </div>
+
+                  {/* -------- Sender Phone No -------- */}
                   <label className="label text-xs md:text-sm">
-                    Sender Name
+                    Sender Phone No
                   </label>
                   <input
-                    type="text"
+                    type="number"
                     className="input w-full"
-                    placeholder="Sender Name"
-                    {...register("senderName")}
+                    placeholder="Sender Phone"
+                    {...register("senderPhone")}
                   />
-                  {/* ----- sender email */}
-                  <label className="label text-xs md:text-sm">
-                    Sender Email
-                  </label>
-                  <input
-                    type="email"
-                    className="input w-full"
-                    placeholder="Sender Email"
-                    {...register("senderEmail")}
-                  />
+
+                  {/* ----- Sender Region and District ----- */}
+                  <div className="flex flex-col md:flex-row">
+                    <div className="flex-1">
+                      {/* ------- Sender Region -------- */}
+                      <label className="label text-xs md:text-sm">
+                        Sender Region
+                      </label>
+                      <select
+                        className="select select-bordered w-full"
+                        {...register("senderRegion")}
+                      >
+                        <option disabled selected>
+                          Select your region
+                        </option>
+                        {regions.map((r, i) => (
+                          <option key={i} value={r}>
+                            {r}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div className="flex-1">
+                      {/* -------- Sender District -------- */}
+                      <label className="label text-xs md:text-sm">
+                        Sender District
+                      </label>
+                      <select
+                        className="select select-bordered w-full"
+                        {...register("senderDistrict")}
+                      >
+                        <option disabled selected>
+                          Select your District
+                        </option>
+                        {regionWiseDistricts(senderRegion).map((r, i) => (
+                          <option key={i} value={r}>
+                            {r}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
                   {/* ---- Sender Address ----- */}
                   <label className="label text-xs md:text-sm">
                     Sender Address
@@ -124,52 +239,15 @@ const SendParcel = () => {
                     {...register("senderAddress")}
                   />
 
-                  {/* ------- Sender Region -------- */}
+                  {/* -------- Sender Instruction No -------- */}
                   <label className="label text-xs md:text-sm">
-                    Sender Region
+                    Pickup Instructions
                   </label>
-                  <select
-                    className="select select-bordered w-full"
-                    {...register("senderRegion")}
-                  >
-                    <option disabled selected>
-                      Select your region
-                    </option>
-                    {regions.map((r, i) => (
-                      <option key={i} value={r}>
-                        {r}
-                      </option>
-                    ))}
-                  </select>
-
-                  {/* -------- Sender District -------- */}
-
-                  <label className="label text-xs md:text-sm">
-                    Sender District
-                  </label>
-                  <select
-                    className="select select-bordered w-full"
-                    {...register("senderDistrict")}
-                  >
-                    <option disabled selected>
-                      Select your District
-                    </option>
-                    {regionWiseDistricts(senderRegion).map((r, i) => (
-                      <option key={i} value={r}>
-                        {r}
-                      </option>
-                    ))}
-                  </select>
-
-                  {/* -------- Sender Phone No -------- */}
-                  <label className="label text-xs md:text-sm">
-                    Sender Phone No
-                  </label>
-                  <input
-                    type="number"
-                    className="input w-full"
-                    placeholder="Sender Phone"
-                    {...register("senderPhone")}
+                  <textarea
+                    type="text"
+                    className="textarea w-full"
+                    placeholder="Parcel Pickup Instructions"
+                    {...register("senderParcelIns")}
                   />
                 </fieldset>
               </div>
@@ -212,32 +290,41 @@ const SendParcel = () => {
                     placeholder="Receiver Address"
                     {...register("receiverAddress")}
                   />
+
                   {/* ------- Receiver Region -------- */}
-                  <fieldset>
-                    <label className="label text-xs md:text-sm block md:pb-1">
-                      Receiver Region
-                    </label>
-                    <select className="select select-bordered w-full">
-                      <option disabled selected>
-                        Select your region
+                  <label className="label text-xs md:text-sm">
+                    Receiver Region
+                  </label>
+                  <select
+                    className="select select-bordered w-full"
+                    {...register("receiverRegion")}
+                  >
+                    <option disabled selected>
+                      Select your region
+                    </option>
+                    {regions.map((r, i) => (
+                      <option key={i} value={r}>
+                        {r}
                       </option>
-                      {regions.map((r, i) => (
-                        <option key={i} value={r}>
-                          {r}
-                        </option>
-                      ))}
-                    </select>
-                  </fieldset>
-                  {/* -------- Receiver District -------- */}
+                    ))}
+                  </select>
+
                   <label className="label text-xs md:text-sm">
                     Receiver District
                   </label>
-                  <input
-                    type="text"
-                    className="input w-full"
-                    placeholder="Receiver District"
+                  <select
+                    className="select select-bordered w-full"
                     {...register("receiverDistrict")}
-                  />
+                  >
+                    <option disabled selected>
+                      Select your District
+                    </option>
+                    {regionWiseDistricts(receiverRegion).map((d, i) => (
+                      <option key={i} value={d}>
+                        {d}
+                      </option>
+                    ))}
+                  </select>
 
                   {/* -------- Receiver Phone No -------- */}
                   <label className="label text-xs md:text-sm">
@@ -253,6 +340,10 @@ const SendParcel = () => {
               </div>
             </div>
           </div>
+
+          <p className="text-sm md:text-base font-bold py-2 md:py-4 my-3 md:my-6">
+            *Pick-up time 4pm to 7pm Approx
+          </p>
           <button
             type="submit"
             className="btn btn-sm md:btn-md btn-primary text-gray-900 md:text-base font-bold"

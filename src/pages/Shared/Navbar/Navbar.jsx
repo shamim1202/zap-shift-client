@@ -28,6 +28,13 @@ const Navbar = () => {
       <li className="text-sm md:text-base font-semibold">
         <NavLink>Contact</NavLink>
       </li>
+      {user && (
+        <>
+          <li className="text-sm md:text-base font-semibold">
+            <NavLink to="dashboard/my_parcels">My Parcels</NavLink>
+          </li>
+        </>
+      )}
     </>
   );
 
