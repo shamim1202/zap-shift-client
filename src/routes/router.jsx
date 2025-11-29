@@ -7,6 +7,9 @@ import Register from "../pages/Auth/Register/Register";
 import BeARider from "../pages/BeARider/BeARider";
 import Coverage from "../pages/Coverage/Coverage";
 import MyParcels from "../pages/Dashboard/MyParcels/MyParcels";
+import Payment from "../pages/Dashboard/Payment/Payment";
+import PaymentCanceled from "../pages/Dashboard/Payment/PaymentCanceled";
+import PaymentSuccess from "../pages/Dashboard/Payment/PaymentSuccess";
 import Home from "../pages/Home/Home/Home";
 import SendParcel from "../pages/SendParcel/SendParcel";
 import PrivateRoute from "./PrivateRoute";
@@ -70,6 +73,18 @@ export const router = createBrowserRouter([
         path: "my_parcels",
         Component: MyParcels,
       },
+      {
+        path: "payment/:parcelId",
+        Component: Payment,
+      },
+      {
+        path: "payment-success",
+        Component: PaymentSuccess,
+      },
+      {
+        path: "payment-cancelled",
+        Component: PaymentCanceled
+      }
     ],
   },
 ]);
