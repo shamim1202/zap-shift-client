@@ -1,3 +1,4 @@
+import { FaRegCreditCard } from "react-icons/fa";
 import { FiHome } from "react-icons/fi";
 import { LuSettings2 } from "react-icons/lu";
 import { TbTruckDelivery } from "react-icons/tb";
@@ -61,7 +62,7 @@ const DashboardLayout = () => {
                 </Link>
               </li>
 
-              {/* Our Dashboard links <TbTruckDelivery /> */}
+              {/* |---------- My Parcel Details ----------| */}
               <li>
                 <NavLink
                   to="my_parcels"
@@ -73,7 +74,19 @@ const DashboardLayout = () => {
                 </NavLink>
               </li>
 
-              {/* List item */}
+              {/* |-------- Parcel Payment History --------| */}
+              <li>
+                <NavLink
+                  to="payment-history"
+                  className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                  data-tip="Payment History"
+                >
+                  <FaRegCreditCard className="md:text-xl" />{" "}
+                  <span className="is-drawer-close:hidden">Payment History</span>
+                </NavLink>
+              </li>
+
+              {/* |---------- Parcel Setting -----------| */}
               <li>
                 <button
                   className="is-drawer-close:tooltip is-drawer-close:tooltip-right"

@@ -13,6 +13,7 @@ import PaymentSuccess from "../pages/Dashboard/Payment/PaymentSuccess";
 import Home from "../pages/Home/Home/Home";
 import SendParcel from "../pages/SendParcel/SendParcel";
 import PrivateRoute from "./PrivateRoute";
+import PaymentHistory from "../pages/Dashboard/PaymentHistory/PaymentHistory";
 
 export const router = createBrowserRouter([
   {
@@ -83,8 +84,12 @@ export const router = createBrowserRouter([
       },
       {
         path: "payment-cancelled",
-        Component: PaymentCanceled
-      }
+        Component: PaymentCanceled,
+      },
+      {
+        path: "payment-history",
+        Component: PaymentHistory,
+      },
     ],
   },
 ]);
