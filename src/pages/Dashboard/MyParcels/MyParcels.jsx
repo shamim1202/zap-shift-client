@@ -5,7 +5,6 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 import Swal from "sweetalert2";
 import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
-import { Link } from "react-router";
 
 const MyParcels = () => {
   const { user } = useAuth();
@@ -79,8 +78,8 @@ const MyParcels = () => {
               <th>Parcel Type</th>
               <th>Parcel Weight</th>
               <th>Parcel Cost</th>
-              <th>Payment</th>
-              <th>Status</th>
+              <th>Payment Status</th>
+              <th>Delivery Status</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -97,7 +96,7 @@ const MyParcels = () => {
 
                 <td>
                   {p.paymentStatus === "paid" ? (
-                    <span className="bg-green-600 text-white font-bold md:px-5 md:py-2 rounded">
+                    <span className="bg-green-600 text-white font-bold md:px-5.5 md:py-2 rounded">
                       Paid
                     </span>
                   ) : (
