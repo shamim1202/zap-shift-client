@@ -1,8 +1,35 @@
+import { useQuery } from "@tanstack/react-query";
 import riderImg from "../../assets/agent-pending.png";
+import { useForm, useWatch } from "react-hook-form";
+import useAuth from "../../hooks/useAuth";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
+import { useLoaderData } from "react-router";
 
 const BeARider = () => {
+  const { user } = useAuth();
+  const axiosSecure = useAxiosSecure();
+  const { register, handleSubmit, control } = useForm();
+
+  // get all region from api/json --------------->
+  const allRegions = useLoaderData();
+  const duplicateRegions = allRegions.map((c) => c.region);
+  const regions = [...new Set(duplicateRegions)];
+  const riderRegion = useWatch({ control, name: "riderRegion" });
+
+  // show all district region wise -------------->
+  const regionWiseDistricts = (region) => {
+    const regionalDistricts = allRegions.filter((r) => r.region === region);
+    const districts = regionalDistricts.map((d) => d.district);
+    return districts;
+  };
+
+  const handleRiderApply = (data) => {
+    console.log("object");
+  };
+
   return (
     <div className="bg-white md:px-20 md:py-16">
+      {/* ------------------ Image Side -------------------- */}
       <div className="md:w-[50%] md:mb-10">
         <h1 className="text-2xl md:text-5xl font-bold md:font-extrabold text-secondary md:mb-4">
           Be a Rider
@@ -14,11 +41,17 @@ const BeARider = () => {
         </p>
       </div>
 
-      <h3 className="md:text-2xl font-bold text-secondary">Tell Us About Yourself</h3>
+      {/* ---------------- Form Info Side ------------------ */}
+      <h3 className="md:text-2xl font-bold text-secondary">
+        Tell Us About Yourself
+      </h3>
       <div className="flex flex-col-reverse md:flex-row items-end justify-between md:gap-16">
         {/* ---------- Rider Join Form ----------- */}
         <div className="flex-1">
-          <fieldset className="fieldset p-4 rounded-xl">
+          <form
+            onSubmit={handleSubmit(handleRiderApply)}
+            className="fieldset p-4 rounded-xl"
+          >
             {/* ------------ Name & Age ------------ */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="form-control">
@@ -126,7 +159,7 @@ const BeARider = () => {
             <button className="btn btn-primary btn-sm md:btn-md text-gray-900 text-base mt-6">
               Submit
             </button>
-          </fieldset>
+          </form>
         </div>
 
         <div className="flex-1">

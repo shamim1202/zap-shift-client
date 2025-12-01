@@ -2,19 +2,20 @@ import { useForm } from "react-hook-form";
 import { Link, useLocation, useNavigate } from "react-router";
 import Logo from "../../../components/Logo/Logo";
 import useAuth from "../../../hooks/useAuth";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const Login = () => {
   const { register, handleSubmit } = useForm();
   const { signInUser, googleLogin } = useAuth();
-  const location = useLocation()
-  const navigate = useNavigate()
-  console.log(location, navigate)
+  const location = useLocation();
+  const navigate = useNavigate();
+  const axiosSecure = useAxiosSecure();
 
   const handleLogin = (data) => {
     signInUser(data.email, data.password)
       .then((res) => {
         console.log(res.user);
-        navigate(location?.state ? location.state : "/")
+        navigate(location?.state ? location.state : "/");
       })
       .then((err) => {
         console.log(err);
@@ -25,7 +26,18 @@ const Login = () => {
     googleLogin()
       .then((res) => {
         console.log(res.user);
-        navigate(location?.state ? location.state : "/")
+
+        // Create User In The Database ----------------------|
+        const userInfo = {
+          displayName: res.user.displayName,
+          email: res.user.email,
+          photoURL: res.user.photoURL,
+        };
+
+        axiosSecure.post("/users", userInfo).then((res) => {
+          console.log("user stored from login", res.data);
+          navigate(location?.state ? location.state : "/");
+        });
       })
       .then((err) => {
         console.log(err);

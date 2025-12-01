@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { Link, useLocation, useNavigate } from "react-router";
 import Logo from "../../../components/Logo/Logo";
 import useAuth from "../../../hooks/useAuth";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const Register = () => {
   const { registerUser, updateUserProfile } = useAuth();
@@ -12,16 +13,15 @@ const Register = () => {
     formState: { errors },
   } = useForm();
 
-  const location = useLocation()
-  const navigate = useNavigate()
-  console.log(location)
+  const location = useLocation();
+  const navigate = useNavigate();
+  const axiosSecure = useAxiosSecure();
 
   const handleRegister = (data) => {
     const profileImg = data.photo[0];
 
     registerUser(data.email, data.password)
       .then((res) => {
-        console.log(res.user);
         const formData = new FormData();
         formData.append("image", profileImg);
         const imgApiUrl = `https://api.imgbb.com/1/upload?key=${
@@ -29,15 +29,29 @@ const Register = () => {
         }`;
 
         axios.post(imgApiUrl, formData).then((res) => {
+          const photoURL = res.data.data.url;
+
+          // Create User In The Database ----------------------|
+          const userInfo = {
+            displayName: data.name,
+            email: data.email,
+            photoURL: photoURL,
+          };
+
+          axiosSecure.post("/users", userInfo).then((res) => {
+            if (res.data.insertedId) {
+              console.log("user created successfully in the database");
+            }
+          });
 
           const userProfile = {
             displayName: data.name,
-            photoURL: res.data.data.url,
+            photoURL: photoURL,
           };
           updateUserProfile(userProfile)
             .then(() => {
               console.log("User Profile Update Successful");
-              navigate=(location?.state ? location.state : "/")
+              navigate(location?.state ? location.state : "/")
             })
             .catch((err) => {
               console.log(err);
