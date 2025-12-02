@@ -1,9 +1,9 @@
-import { useQuery } from "@tanstack/react-query";
 import riderImg from "../../assets/agent-pending.png";
 import { useForm, useWatch } from "react-hook-form";
 import useAuth from "../../hooks/useAuth";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { useLoaderData } from "react-router";
+import Swal from "sweetalert2";
 
 const BeARider = () => {
   const { user } = useAuth();
@@ -24,7 +24,19 @@ const BeARider = () => {
   };
 
   const handleRiderApply = (data) => {
-    console.log("object");
+    console.log("Rider Entry Info Data", data);
+    axiosSecure.post("/riders", data).then((res) => {
+      if (res.data.insertedId) {
+        Swal.fire({
+          position: "top-end",
+          title: "Confirmed!",
+          text: "Your application has been submitted. Wait 72 hours until confirmation.",
+          showConfirmButton: "false",
+          icon: "success",
+          timer: 5000,
+        });
+      }
+    });
   };
 
   return (
@@ -62,6 +74,7 @@ const BeARider = () => {
                   type="text"
                   className="input input-bordered"
                   placeholder="Name"
+                  {...register("riderName")}
                 />
               </div>
 
@@ -73,11 +86,12 @@ const BeARider = () => {
                   type="number"
                   className="input input-bordered"
                   placeholder="Age"
+                  {...register("riderAge")}
                 />
               </div>
             </div>
 
-            {/* ------------ Email & Region ------------ */}
+            {/* ------------ Email & Contact ------------ */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
               <div className="form-control">
                 <label className="label">
@@ -87,38 +101,7 @@ const BeARider = () => {
                   type="email"
                   className="input input-bordered"
                   placeholder="Email"
-                />
-              </div>
-
-              <div className="form-control">
-                <label className="label">
-                  <span className="label-text">Your Region</span>
-                </label>
-                <select className="select select-bordered">
-                  <option disabled selected>
-                    Select your region
-                  </option>
-                  <option>Dhaka</option>
-                  <option>Barishal</option>
-                  <option>Rajshahi</option>
-                  <option>Khulna</option>
-                  <option>Chottogram</option>
-                  <option>Jessore</option>
-                  <option>Shylet</option>
-                </select>
-              </div>
-            </div>
-
-            {/* ------------ NID & Contact ------------ */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-              <div className="form-control">
-                <label className="label">
-                  <span className="label-text">Your NID No.</span>
-                </label>
-                <input
-                  type="number"
-                  className="input input-bordered"
-                  placeholder="NID Number"
+                  {...register("riderEmail")}
                 />
               </div>
 
@@ -130,40 +113,129 @@ const BeARider = () => {
                   type="number"
                   className="input input-bordered"
                   placeholder="Contact"
+                  {...register("riderContact")}
                 />
               </div>
             </div>
 
-            {/* ------------ Warehouse ------------ */}
-            <div className="form-control mt-4">
+            {/* ------------ NID & Bike ------------ */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text">Your NID No.</span>
+                </label>
+                <input
+                  type="number"
+                  className="input input-bordered"
+                  placeholder="NID Number"
+                  {...register("riderNid")}
+                />
+              </div>
+
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text">Your Bike Info</span>
+                </label>
+                <input
+                  type="text"
+                  className="input input-bordered"
+                  placeholder="Bike Details"
+                  {...register("riderBike")}
+                />
+              </div>
+            </div>
+
+            {/* ------------ Liscense & Registration ------------ */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text">Driving License No.</span>
+                </label>
+                <input
+                  type="text"
+                  className="input input-bordered"
+                  placeholder="Your License"
+                  {...register("riderLicense")}
+                />
+              </div>
+
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text">Registration No.</span>
+                </label>
+                <input
+                  type="text"
+                  className="input input-bordered"
+                  placeholder="Your Vehicle Registration No"
+                  {...register("riderReg")}
+                />
+              </div>
+            </div>
+
+            {/* --------- Rider region & Warehouse ---------- */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text">Your Region</span>
+                </label>
+                <select
+                  className="select select-bordered w-full"
+                  {...register("riderRegion")}
+                >
+                  <option disabled selected>
+                    Select your region
+                  </option>
+                  {regions.map((r, i) => (
+                    <option key={i} value={r}>
+                      {r}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text">
+                    Which warehouse you want to work?
+                  </span>
+                </label>
+                <select
+                  className="select select-bordered w-full"
+                  {...register("riderDistrict")}
+                >
+                  <option disabled selected>
+                    Select your Warehouse
+                  </option>
+                  {regionWiseDistricts(riderRegion).map((r, i) => (
+                    <option key={i} value={r}>
+                      {r}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            <div className="form-control mt-2 flex flex-col">
               <label className="label">
-                <span className="label-text">
-                  Which warehouse you want to work?
-                </span>
+                <span className="label-text">Your Address</span>
               </label>
-              <select className="select select-bordered w-full">
-                <option disabled selected>
-                  Select Warehouse
-                </option>
-                <option>Dhaka</option>
-                <option>Barishal</option>
-                <option>Rajshahi</option>
-                <option>Khulna</option>
-                <option>Chottogram</option>
-                <option>Jessore</option>
-                <option>Shylet</option>
-              </select>
+              <input
+                type="text"
+                className="input input-bordered w-full"
+                placeholder="Your Address"
+                {...register("riderAddress")}
+              />
             </div>
 
             {/* ------------ Submit Button ------------ */}
-            <button className="btn btn-primary btn-sm md:btn-md text-gray-900 text-base mt-6">
-              Submit
+            <button className="btn btn-primary btn-sm md:btn-md text-secondary text-base mt-6">
+              Apply As a Rider
             </button>
           </form>
         </div>
 
         <div className="flex-1">
-          <img className="w-[80%] mx-auto" src={riderImg} alt="" srcset="" />
+          <img className="w-full" src={riderImg} alt="" srcset="" />
         </div>
       </div>
     </div>

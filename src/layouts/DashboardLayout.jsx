@@ -1,6 +1,7 @@
 import { FaRegCreditCard } from "react-icons/fa";
 import { FiHome } from "react-icons/fi";
 import { LuSettings2 } from "react-icons/lu";
+import { RiEBike2Fill } from "react-icons/ri";
 import { TbTruckDelivery } from "react-icons/tb";
 import { Link, NavLink, Outlet } from "react-router";
 
@@ -46,14 +47,14 @@ const DashboardLayout = () => {
             aria-label="close sidebar"
             className="drawer-overlay"
           ></label>
-          <div className="flex min-h-full flex-col items-start bg-base-200 is-drawer-close:w-14 is-drawer-open:w-64">
+          <div className="flex min-h-full flex-col items-start bg-base-200 is-drawer-close:w-16 is-drawer-open:w-64">
             {/* Sidebar content here */}
             <ul className="menu w-full grow">
-              {/* List item */}
+              {/* |---------------- Home Menu ---------------| */}
               <li>
                 <Link
                   to="/"
-                  className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                  className="is-drawer-close:tooltip is-drawer-close:tooltip-right tooltip-secondary hover:bg-primary"
                   data-tip="Homepage"
                 >
                   {/* Home icon */}
@@ -62,11 +63,11 @@ const DashboardLayout = () => {
                 </Link>
               </li>
 
-              {/* |---------- My Parcel Details ----------| */}
+              {/* |------------ My Parcel Details -----------| */}
               <li>
                 <NavLink
                   to="my_parcels"
-                  className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                  className="is-drawer-close:tooltip is-drawer-close:tooltip-right tooltip-secondary hover:bg-primary"
                   data-tip="My Parcels"
                 >
                   <TbTruckDelivery className="md:text-xl" />{" "}
@@ -74,22 +75,38 @@ const DashboardLayout = () => {
                 </NavLink>
               </li>
 
-              {/* |-------- Parcel Payment History --------| */}
+              {/* |---------- Parcel Payment History ---------| */}
               <li>
                 <NavLink
                   to="payment-history"
-                  className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                  className="is-drawer-close:tooltip is-drawer-close:tooltip-right tooltip-secondary hover:bg-primary"
                   data-tip="Payment History"
                 >
                   <FaRegCreditCard className="md:text-xl" />{" "}
-                  <span className="is-drawer-close:hidden">Payment History</span>
+                  <span className="is-drawer-close:hidden">
+                    Payment History
+                  </span>
                 </NavLink>
               </li>
 
-              {/* |---------- Parcel Setting -----------| */}
+              {/* |----------- Approved Riders List ----------| */}
+              <li>
+                <NavLink
+                  to="approve-riders"
+                  className="is-drawer-close:tooltip is-drawer-close:tooltip-right tooltip-secondary hover:bg-primary"
+                  data-tip="Approve Riders"
+                >
+                  <RiEBike2Fill className="md:text-xl" />{" "}
+                  <span className="is-drawer-close:hidden">
+                    Approve Riders
+                  </span>
+                </NavLink>
+              </li>
+
+              {/* |------------- Parcel Setting --------------| */}
               <li>
                 <button
-                  className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                  className="is-drawer-close:tooltip is-drawer-close:tooltip-right tooltip-secondary hover:bg-primary"
                   data-tip="Settings"
                 >
                   {/* Settings icon */}
